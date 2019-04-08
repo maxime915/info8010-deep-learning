@@ -8,10 +8,6 @@ Lecture 2: Neural networks
 Prof. Gilles Louppe<br>
 [g.louppe@uliege.be](g.louppe@uliege.be)
 
-???
-
-R: regression -> assume p(y|x) is Gaussian, hence the minimization of the mean squared error.
-
 ---
 
 # Today
@@ -22,19 +18,6 @@ Explain and motivate the basic constructs of neural networks.
 - Stochastic gradient descent
 - From logistic regression to the multi-layer perceptron
 - Vanishing gradients and rectified networks
-- Universal approximation theorem
-
----
-
-# Cooking recipe
-
-- Get data (loads of them).
-- Get good hardware.
-- Define the neural network architecture as a composition of differentiable functions.
-    - Stick to non-saturating activation function to avoid vanishing gradients.
-    - Prefer deep over shallow architectures.
-- Optimize with (variants of) stochastic gradient descent.
-    - Evaluate gradients with automatic differentiation.
 
 ---
 
@@ -44,35 +27,9 @@ class: middle
 
 ---
 
-# Threshold Logic Unit
-
-The Threshold Logic Unit (McCulloch and Pitts, 1943) was the first mathematical model for a **neuron**.
-Assuming Boolean inputs and outputs, it is defined as:
-
-$$f(\mathbf{x}) = 1_{\\{\sum_i w\_i x_i + b \geq 0\\}}$$
-
-This unit can implement:
-
-- $\text{or}(a,b) = 1\_{\\\{a+b - 0.5 \geq 0\\\}}$
-- $\text{and}(a,b) = 1\_{\\\{a+b - 1.5 \geq 0\\\}}$
-- $\text{not}(a) = 1\_{\\\{-a + 0.5 \geq 0\\\}}$
-
-Therefore, any Boolean function can be built with such units.
-
----
-
-class: middle
-
-.center.width-40[![](figures/lec2/tlu.png)]
-
-.footnote[Credits: McCulloch and Pitts, [A logical calculus of ideas immanent in nervous activity](http://www.cse.chalmers.se/~coquand/AUTOMATA/mcp.pdf), 1943.]
-
-
----
-
 # Perceptron
 
-The perceptron (Rosenblatt, 1957) is very similar, except that the inputs are real:
+The perceptron (Rosenblatt, 1957) is a simple mathematical model of a neuron:
 
 $$f(\mathbf{x}) = \begin{cases}
    1 &\text{if } \sum_i w_i x_i + b \geq 0  \\\\
@@ -80,30 +37,6 @@ $$f(\mathbf{x}) = \begin{cases}
 \end{cases}$$
 
 This model was originally motivated by biology, with $w_i$ being synaptic weights and $x_i$ and $f$ firing rates.
-
----
-
-class: middle
-
-.center.width-100[![](figures/lec2/perceptron.jpg)]
-
-.footnote[Credits: Frank Rosenblatt, [Mark I Perceptron operators' manual](https://apps.dtic.mil/dtic/tr/fulltext/u2/236965.pdf), 1960.]
-
-???
-
-A perceptron is a signal transmission network
-consisting of sensory units (S units), association units
-(A units), and output or response units (R units). The
-‘retina’ of the perceptron is an array of sensory
-elements (photocells). An S-unit produces a binary
-output depending on whether or not it is excited. A
-randomly selected set of retinal cells is connected to
-the next level of the network, the A units. As originally
-proposed there were extensive connections among the
-A units, the R units, and feedback between the R units
-and the A units.
-
-In essence an association unit is also an MCP neuron which is 1 if a single specific pattern of inputs is received, and it is 0 for all other possible patterns of  inputs. Each association unit will have a certain number of inputs which are selected from all the inputs to the perceptron.  So the number of inputs to a particular association unit does not have to be the same as the total number of inputs to the perceptron, but clearly the number of inputs to an association unit  must be less than or equal to the total number of inputs to the perceptron.  Each association unit's output then becomes the input to a single MCP neuron, and the output from this single MCP neuron is the output of the perceptron.  So a perceptron consists of a "layer" of MCP neurons, and all of these neurons send their output to a single MCP neuron.
 
 ---
 
@@ -115,15 +48,6 @@ class: middle, center, black-slide
 ]
 
 The Mark I Percetron (Frank Rosenblatt).
-
----
-
-class: middle, center, black-slide
-
-<iframe width="600" height="450" src="https://www.youtube.com/embed/cNxadbrN_aI" frameborder="0" allowfullscreen></iframe>
-
-The Perceptron
-
 
 ---
 
@@ -144,30 +68,9 @@ $$f(\mathbf{x}) = \text{sign}(\sum\_i w\_i x\_i  + b).$$
 
 class: middle
 
-## Computational graphs
-
-.grid[
-.kol-3-5[.width-90[![](figures/lec2/graphs/perceptron.svg)]]
-.kol-2-5[
-The computation of
-$$f(\mathbf{x}) = \text{sign}(\sum\_i w\_i x\_i  + b)$$ can be represented as a **computational graph** where
-- white nodes correspond to inputs and outputs;
-- red nodes correspond to model parameters;
-- blue nodes correspond to intermediate operations.
-]
-]
-
-???
-
-Note that some intermediate nodes are not represented.
-
----
-
-class: middle
-
 In terms of **tensor operations**, $f$ can be rewritten as
 $$f(\mathbf{x}) = \text{sign}(\mathbf{w}^T  \mathbf{x} + b),$$
-for which the corresponding computational graph of $f$ is:
+for which the corresponding *computational graph* of $f$ is:
 
 .center.width-70[![](figures/lec2/graphs/perceptron-neuron.svg)]
 
@@ -288,17 +191,7 @@ $$\begin{aligned}
 
 This loss is an instance of the **cross-entropy** $$H(p,q) = \mathbb{E}_p[-\log q]$$ for  $p=Y|\mathbf{x}\_i$ and $q=\hat{Y}|\mathbf{x}\_i$.
 
----
-
-class: middle
-
-When $Y$ takes values in $\\{-1,1\\}$, a similar derivation yields the **logistic loss** $$\mathcal{L}(\mathbf{w}, b) = -\sum_{\mathbf{x}\_i, y\_i \in \mathbf{d}} \log \sigma\left(y\_i (\mathbf{w}^T \mathbf{x}\_i + b))\right).$$
-
-.center[![](figures/lec2/logistic_loss.png)]
-
----
-
-class: middle
+???
 
 - In general, the cross-entropy and the logistic losses do not admit a minimizer that can be expressed analytically in closed form.
 - However, a minimizer can be found numerically, using a general minimization technique such as **gradient descent**.
@@ -552,8 +445,6 @@ $$\theta\_{t+1} = \theta\_t - \gamma \nabla \ell(y\_{i(t+1)}, f(\mathbf{x}\_{i(t
 - Iteration complexity is independent of $N$.
 - The stochastic process $\\\{ \theta\_t | t=1, ... \\\}$ depends on the examples $i(t)$ picked randomly at each iteration.
 
---
-
 .grid.center.italic[
 .kol-1-2[.width-100[![](figures/lec2/bgd.png)]
 
@@ -563,22 +454,6 @@ Batch gradient descent]
 Stochastic gradient descent
 ]
 ]
-
----
-
-class: middle
-
-Why is stochastic gradient descent still a good idea?
-- Informally, averaging the update
-$$\theta\_{t+1} = \theta\_t - \gamma \nabla \ell(y\_{i(t+1)}, f(\mathbf{x}\_{i(t+1)}; \theta\_t)) $$
-over all choices $i(t+1)$  restores batch gradient descent.
-- Formally, if the gradient estimate is **unbiased**, e.g., if
-$$\begin{aligned}
-\mathbb{E}\_{i(t+1)}[\nabla \ell(y\_{i(t+1)}, f(\mathbf{x}\_{i(t+1)}; \theta\_t))] &= \frac{1}{N} \sum\_{\mathbf{x}\_i, y\_i \in \mathbf{d}} \nabla \ell(y\_i, f(\mathbf{x}\_i; \theta\_t)) \\\\
-&= \nabla \mathcal{L}(\theta\_t)
-\end{aligned}$$
-then the formal convergence of SGD can be proved, under appropriate assumptions (see references).
-- Interestingly, if training examples $\mathbf{x}\_i, y\_i \sim P\_{X,Y}$ are received and used in an online fashion, then SGD directly minimizes the **expected** risk.
 
 ---
 
@@ -669,18 +544,6 @@ These derivatives can be evaluated automatically from the *computational graph* 
 class: middle
 
 ## Chain rule
-
-.center.width-60[![](figures/lec2/graphs/ad-example.svg)]
-
-Let us consider a 1-dimensional output composition $f \circ g$, such that
-$$\begin{aligned}
-y &= f(\mathbf{u}) \\\\
-\mathbf{u} &= g(x) = (g\_1(x), ..., g\_m(x)).
-\end{aligned}$$
-
----
-
-class: middle
 
 The **chain rule** states that $(f \circ g)' = (f' \circ g) g'.$
 
@@ -877,17 +740,6 @@ $$\sup\_{x \in I\_p} |f(x) - F(x)| < \epsilon.$$
 
 class: middle
 
-.bold[Theorem] (Barron, 1992) The mean integrated square error between the estimated network $\hat{F}$ and the target function $f$ is bounded by
-$$O\left(\frac{C^2\_f}{q} + \frac{qp}{N}\log N\right)$$
-where $N$ is the number of training points, $q$ is the number of neurons, $p$ is the input dimension, and $C\_f$ measures the global smoothness of $f$.
-
-- Combines approximation and estimation errors.
-- Provided enough data, it guarantees that adding more neurons will result in a better approximation.
-
----
-
-class: middle
-
 Let us consider the 1-layer MLP
 $$f(x) = \sum w\_i \text{ReLU}(x + b_i).$$  
 This model can approximate any smooth 1D function, provided enough hidden units.
@@ -1025,17 +877,6 @@ $$f(x) = \sum w\_i \text{ReLU}(x + b_i).$$
 This model can approximate any smooth 1D function, provided enough hidden units.
 
 .center[![](figures/lec2/ua-12.png)]
-
----
-
-# Effect of depth
-
-.center.width-80[![](figures/lec2/folding.png)]
-
-.bold[Theorem] (Montúfar et al, 2014) A rectifier neural network with $p$ input units and $L$ hidden layers of width $q \geq p$ can compute functions that have $\Omega((\frac{q}{p})^{(L-1)p} q^p)$ linear regions.
-
-- That is, the number of linear regions of deep models grows **exponentially** in $L$ and polynomially in $q$.
-- Even for small values of $L$ and $q$, deep rectifier models are able to produce substantially more linear regions than shallow rectifier models.
 
 ---
 
