@@ -499,10 +499,7 @@ where $\theta$ denotes the model parameters $\\{ \mathbf{W}\_k, \mathbf{b}\_k, .
 
 This model is the **multi-layer perceptron**, also known as the fully connected feedforward network.
 
----
-
-class: middle, center
-
+<br>
 .width-100[![](figures/lec2/graphs/mlp.svg)]
 
 ---
@@ -610,14 +607,6 @@ $$\begin{aligned}
 &= \frac{\partial \sigma(u\_3)}{\partial u\_3} \frac{\partial \mathbf{W}\_2^T u\_2}{\partial u\_2} \frac{\partial \sigma(u\_1)}{\partial u\_1} \frac{\partial \mathbf{W}\_1^T u\_1}{\partial \mathbf{W}\_1}
 \end{aligned}$$
 Note how evaluating the partial derivatives requires the intermediate values computed forward.
-
----
-
-class: middle
-
-- This algorithm is also known as **backpropagation**.
-- An equivalent procedure can be defined to evaluate the derivatives in *forward mode*, from inputs to outputs.
-- Since differentiation is a linear operator, automatic differentiation can be implemented efficiently in terms of tensor operations.
 
 ---
 

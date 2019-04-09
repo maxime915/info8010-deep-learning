@@ -127,36 +127,6 @@ This is quite similar to Hubel and Wiesel's simple and complex cells!
 
 class: middle
 
-.center.width-40[![](figures/lec3/minsky.png)]
-
-## AI winter (Minsky and Papert, 1969+)
-
-- Minsky and Papert redefine the perceptron as a linear classifier,
-- Then they prove a series of impossiblity results. **AI winter** follows.
-
-.footnote[Credits: Minsky and Papert, Perceptrons: an Introduction to Computational Geometry, 1969.]
-
-???
-
-R: check connectedness slide https://leon.bottou.org/slides/2challenges/2challenges.pdf
-
----
-
-class: middle
-
-.center.width-40[![](figures/lec3/werbos.png)]
-
-## Automatic differentiation (Werbos, 1974)
-
-- Formulate an arbitrary function as computational graph.
-- Dynamic feedback: compute symbolic derivatives by dynamic programming.
-
-.footnote[Credits: Paul Werbos, Beyond regression: new tools for prediction and analysis in the behavioral sciences, 1974.]
-
----
-
-class: middle
-
 ## Neocognitron (Fukushima, 1980)
 
 .center.width-90[![](figures/lec3/neocognitron1.png)]
@@ -555,21 +525,6 @@ where:
 
 ---
 
-# Architectures
-
-Some common architectures for convolutional networks following this pattern include:
-- $\texttt{INPUT} \to \texttt{FC}$, which implements a linear classifier ($N=M=K=0$).
-- $\texttt{INPUT} \to [\texttt{FC} \to \texttt{RELU}]{\*K} \to \texttt{FC}$, which implements a $K$-layer MLP.
-- $\texttt{INPUT} \to \texttt{CONV} \to \texttt{RELU} \to \texttt{FC}$.
-- $\texttt{INPUT} \to [\texttt{CONV} \to \texttt{RELU} \to \texttt{POOL}]\texttt{\*2} \to \texttt{FC} \to \texttt{RELU} \to \texttt{FC}$.
-- $\texttt{INPUT} \to [[\texttt{CONV} \to \texttt{RELU}]\texttt{\*2} \to \texttt{POOL}]\texttt{\*3} \to [\texttt{FC} \to \texttt{RELU}]\texttt{\*2} \to \texttt{FC}$.
-
-???
-
-Note that for the last architecture, two $\texttt{CONV}$ layers are stacked before every $\texttt{POOL}$ layer. This is generally a good idea for larger and deeper networks, because multiple stacked $\texttt{CONV}$  layers can develop more complex features of the input volume before the destructive pooling operation.
-
----
-
 class: center, middle, black-slide
 
 .width-100[![](figures/lec3/convnet.gif)]
@@ -953,40 +908,6 @@ class: middle
 
 ---
 
-# Pre-trained models
-
-- Training a model on natural images, from scratch, takes **days or weeks**.
-- Many models trained on ImageNet are publicly available for download. These models can be used as *feature extractors* or for smart *initialization*.
-
----
-
-class: middle
-
-## Transfer learning
-
-- Take a pre-trained network, remove the last layer(s) and then treat the rest of the the network as a **fixed** feature extractor.
-- Train a model from these features on a new task.
-- Often better than handcrafted feature extraction for natural images, or better than training from data of the new task only.
-
-## Fine tuning
-
-- Same as for transfer learning, but also *fine-tune* the weights of the pre-trained network by continuing backpropagation.
-- All or only some of the layers can be tuned.
-
----
-
-class: middle
-
-In the case of models pre-trained on ImageNet, this often works even when input images for the new task are not photographs of objects or animals, such as biomedical images, satellite images or paintings.
-
-<br>
-
-.center.width-100[![](figures/lec3/feature-extractor.png)]
-
-.footnote[Credits: Mormont et al, [Comparison of deep transfer learning strategies for digital pathology](http://hdl.handle.net/2268/222511), 2018.]
-
----
-
 class: middle
 
 # What is really happening?
@@ -1084,18 +1005,6 @@ The left image is predicted **with 99.9% confidence** as a magpie!
 ???
 
 R: Split in order not to spoil the surprise.
-
----
-
-class: middle, black-slide
-
-.center[
-
-<iframe width="600" height="400" src="https://www.youtube.com/embed/SCE-QeDfXtA?&loop=1&start=0" frameborder="0" volume="0" allowfullscreen></iframe>
-
-]
-
-.bold[Deep Dream.] Start from an image $\mathbf{x}\_t$, offset by a random jitter, enhance some layer activation at multiple scales, zoom in, repeat on the produced image $\mathbf{x}\_{t+1}$.
 
 ---
 
