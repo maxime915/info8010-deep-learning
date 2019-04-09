@@ -84,6 +84,12 @@ class: middle
 
 .footnote[Credits: Hubel and Wiesel, [Receptive fields, binocular interaction and functional architecture in the cat's visual cortex](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1359523/), 1962.]
 
+???
+
+= Detecting a pattern, at a specific location
+
+= Convolution
+
 ---
 
 class: middle
@@ -91,6 +97,12 @@ class: middle
 .width-90.center[![](figures/lec3/hw-complex.png)]
 
 .footnote[Credits: Hubel and Wiesel, [Receptive fields, binocular interaction and functional architecture in the cat's visual cortex](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1359523/), 1962.]
+
+???
+
+= Detecting a pattern, regardless of its location.
+
+= Pooling
 
 ---
 
@@ -403,40 +415,6 @@ class: middle, center
 $$\Leftrightarrow$$
 
 ![](figures/lec3/convolution-linear.svg)
-
----
-
-class: middle
-
-.grid[
-.kol-1-2[
-## Strides
-
-- The *stride* specifies the size of the step for the convolution operator.
-- This parameter reduces the size of the output map.
-]
-.kol-1-2.center[![](figures/lec3/no_padding_strides.gif)]
-]
-
-.footnote[Credits: Dumoulin and Visin, [A guide to convolution arithmetic for deep learning](https://arxiv.org/abs/1603.07285), 2016.]
-
----
-
-class: middle
-
-.grid[
-.kol-1-2[
-## Padding
-
-- **Padding** specifies whether the input volume is padded artificially around its border.
-- This parameter is useful to keep spatial dimensions constant across filters.
-- Zero-padding is the default mode.
-
-]
-.kol-1-2.center[![](figures/lec3/same_padding_no_strides.gif)]
-]
-
-.footnote[Credits: Dumoulin and Visin, [A guide to convolution arithmetic for deep learning](https://arxiv.org/abs/1603.07285), 2016.]
 
 ---
 
