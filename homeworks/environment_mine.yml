@@ -1,0 +1,19 @@
+name: deep_learning
+channels:
+        - pytorch
+        - conda-forge
+dependencies:
+        - python=3
+        - numpy
+        - pandas
+        - scipy
+        - matplotlib
+        - scikit-learn
+        - jupyter
+        - ipython
+        - pylint
+        - rope
+        - keras-gpu
+        - pytorch-gpu>=1.7
+        - torchvision
+        - pillow
